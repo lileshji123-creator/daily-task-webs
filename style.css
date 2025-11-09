@@ -1,71 +1,86 @@
-body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: white;
-  height: 100vh;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const addTaskBtn = document.getElementById("addTaskBtn");
+const taskInput = document.getElementById("taskInput");
+const dateInput = document.getElementById("dateInput");
+const taskList = document.getElementById("taskList");
+
+window.onload = () => {
+  loadTasks();
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+};
+
+addTaskBtn.addEventListener("click", addTask);
+
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("currentDate").textContent = now.toDateString();
+  document.getElementById("currentTime").textContent = now.toLocaleTimeString();
 }
 
-.container {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px 30px;
-  border-radius: 15px;
-  width: 300px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+function addTask() {
+  const taskText = taskInput.value.trim();
+  const dueDate = dateInput.value;
+
+  if (!taskText) return alert("Please enter a task!");
+  if (!dueDate) return alert("Please select a date!");
+
+  const taskDate = new Date(dueDate);
+  const today = new Date();
+  const diff = (taskDate - today) / (1000 * 3600 * 24);
+
+  let className = "";
+  if (diff < 1 && diff >= 0) className = "today";
+  else if (diff < 2) className = "tomorrow";
+  else className = "later";
+
+  const li = document.createElement("li");
+  li.className = className;
+  li.innerHTML = `
+    <div>
+      <span>${taskText}</span><br>
+      <span class="task-info">📅 ${dueDate}</span>
+    </div>
+    <div>
+      <button class="complete-btn">✔</button>
+      <button class="delete-btn">X</button>
+    </div>
+  `;
+
+  li.querySelector(".delete-btn").addEventListener("click", () => {
+    li.remove();
+    saveTasks();
+  });
+
+  li.querySelector(".complete-btn").addEventListener("click", () => {
+    li.classList.toggle("done");
+    saveTasks();
+  });
+
+  taskList.appendChild(li);
+  taskInput.value = "";
+  dateInput.value = "";
+  saveTasks();
 }
 
-h1 {
-  margin-bottom: 15px;
+function saveTasks() {
+  localStorage.setItem("tasks", taskList.innerHTML);
 }
 
-.input-group {
-  display: flex;
-  margin-bottom: 15px;
-}
+function loadTasks() {
+  const saved = localStorage.getItem("tasks");
+  if (saved) taskList.innerHTML = saved;
 
-#taskInput {
-  flex: 1;
-  padding: 8px;
-  border: none;
-  border-radius: 8px 0 0 8px;
-  outline: none;
-}
+  document.querySelectorAll(".delete-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.target.closest("li").remove();
+      saveTasks();
+    });
+  });
 
-#addTaskBtn {
-  background: #ffb703;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
-  color: black;
-  font-weight: bold;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-li {
-  background: rgba(255, 255, 255, 0.2);
-  margin: 5px 0;
-  padding: 8px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-button.delete-btn {
-  background: #ff4d4d;
-  border: none;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 5px;
-  cursor: pointer;
+  document.querySelectorAll(".complete-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.target.closest("li").classList.toggle("done");
+      saveTasks();
+    });
+  });
 }
