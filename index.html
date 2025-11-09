@@ -3,16 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Task App</title>
+  <title>Daily Task Planner</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🗓️ Daily Task List</h1>
+    <h1>🗓️ Daily Task Planner</h1>
+
+    <div class="date-time">
+      <span id="currentDate"></span>
+      <span id="currentTime"></span>
+    </div>
+
     <div class="input-group">
       <input id="taskInput" type="text" placeholder="Enter your task..." />
-      <button id="addTaskBtn">Add Task</button>
+      <input id="dateInput" type="date" />
+      <button id="addTaskBtn">Add</button>
     </div>
+
     <ul id="taskList"></ul>
   </div>
 
