@@ -1,21 +1,128 @@
-const addTaskBtn = document.getElementById("addTaskBtn");
-const taskInput = document.getElementById("taskInput");
-const taskList = document.getElementById("taskList");
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-addTaskBtn.addEventListener("click", addTask);
-taskInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") addTask();
-});
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px 35px;
+  border-radius: 20px;
+  width: 380px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
 
-function addTask() {
-  const taskText = taskInput.value.trim();
-  if (taskText === "") return alert("Please enter a task!");
+h1 {
+  margin-bottom: 10px;
+}
 
-  const li = document.createElement("li");
-  li.innerHTML = `${taskText} <button class="delete-btn">X</button>`;
+.date-time {
+  margin-bottom: 15px;
+  font-size: 14px;
+  opacity: 0.9;
+}
 
-  li.querySelector(".delete-btn").addEventListener("click", () => li.remove());
+.input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
 
-  taskList.appendChild(li);
-  taskInput.value = "";
+input[type="text"],
+input[type="date"] {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+#addTaskBtn {
+  background: #ffb703;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+#addTaskBtn:hover {
+  background: #ff9f00;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+li span {
+  flex: 1;
+  text-align: left;
+}
+
+li.done {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.task-info {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+button.delete-btn {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.complete-btn {
+  background: #38b000;
+  border: none;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🎨 Task color categories */
+li.today {
+  background: #38b000;
+}
+li.tomorrow {
+  background: #f9c74f;
+}
+li.later {
+  background: #f94144;
 }
